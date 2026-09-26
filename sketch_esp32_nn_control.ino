@@ -703,10 +703,10 @@ void runControlStep(float target[3]) {
   }
   memcpy(x_state, x_next, sizeof(x_state));
 
-// 6. clamp between 0 and 1 (blue gets capped lower, for blue light hazard reduction)
-u_out[0] = constrain(u_out[0], 0.0f, 1.0f);
-u_out[1] = constrain(u_out[1], 0.0f, 1.0f);
-u_out[2] = constrain(u_out[2], 0.0f, 0.8f);   // blue capped at 80% duty
+// 6. clamp between 0 and 0.8 (blue gets capped lower, for blue light hazard reduction)
+u_out[0] = constrain(u_out[0], 0.0f, 0.8f);    // 80%
+u_out[1] = constrain(u_out[1], 0.0f, 0.8f);    // 80%
+u_out[2] = constrain(u_out[2], 0.0f, 0.55f);   // blue capped at 55% duty
 
 ledcWrite(PIN_LED_RED,   (uint32_t)(u_out[0] * PWM_MAX_DUTY));
 ledcWrite(PIN_LED_GREEN, (uint32_t)(u_out[1] * PWM_MAX_DUTY));
