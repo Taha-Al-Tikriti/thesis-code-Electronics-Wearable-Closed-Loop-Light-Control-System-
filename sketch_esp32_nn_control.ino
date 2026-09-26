@@ -703,15 +703,14 @@ void runControlStep(float target[3]) {
   }
   memcpy(x_state, x_next, sizeof(x_state));
 
-  // 6. clamp between 0 and 1 so we dont overdrive the leds, then write it out
-  for (int i = 0; i < 3; i++) {
-    u_out[i] = constrain(u_out[i], 0.0f, 1.0f);
-  }
+// 6. clamp between 0 and 1 (blue gets capped lower, for blue light hazard reduction)
+u_out[0] = constrain(u_out[0], 0.0f, 1.0f);
+u_out[1] = constrain(u_out[1], 0.0f, 1.0f);
+u_out[2] = constrain(u_out[2], 0.0f, 0.8f);   // blue capped at 80% duty
 
-  ledcWrite(PIN_LED_RED,   (uint32_t)(u_out[0] * PWM_MAX_DUTY));
-  ledcWrite(PIN_LED_GREEN, (uint32_t)(u_out[1] * PWM_MAX_DUTY));
-  ledcWrite(PIN_LED_BLUE,  (uint32_t)(u_out[2] * PWM_MAX_DUTY));
-}
+ledcWrite(PIN_LED_RED,   (uint32_t)(u_out[0] * PWM_MAX_DUTY));
+ledcWrite(PIN_LED_GREEN, (uint32_t)(u_out[1] * PWM_MAX_DUTY));
+ledcWrite(PIN_LED_BLUE,  (uint32_t)(u_out[2] * PWM_MAX_DUTY));
 
 // ====-====-====-====-====-====-====-====-====-====-====-====-====-====-
 // SESSION LOOP (vitals + color_ctrl + pack_data + loop_check + leds_off)
